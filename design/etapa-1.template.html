@@ -1,0 +1,389 @@
+<title>OMOPLATA · Etapa 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: prancha de revisão de marca. Um palco vivo no topo, depois fichas técnicas em grade editorial 12 colunas. */
+@font-face{font-family:"General Sans";src:url(data:font/woff2;base64,{{GS500}}) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"General Sans";src:url(data:font/woff2;base64,{{GS600}}) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Instrument Serif";src:url(data:font/woff2;base64,{{IS}}) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+:root{
+  color-scheme:dark;
+  --petrol-950:#0F1F24;--petrol-900:#16292F;--petrol-800:#1F3A43;--petrol-700:#2E4A54;--petrol-500:#4F6F79;--petrol-300:#8FA8AF;
+  --violet-500:#5B3FE0;--violet-400:#7D63F2;--violet-300:#9C8BF2;
+  --aqua-400:#5EE6D8;--bone:#F4F1EC;--bone-200:#E9E3D9;--wood:#D9B98C;
+  --bg:var(--petrol-950);--fg:var(--bone);--muted:var(--petrol-300);--rule:rgba(143,168,175,.18);
+  --sans:"General Sans",ui-sans-serif,system-ui,sans-serif;
+  --serif:"Instrument Serif",ui-serif,Georgia,serif;
+  --expo:cubic-bezier(.16,1,.3,1);
+  --gut:max(16px,env(safe-area-inset-left,0px));
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:500;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.impact{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.08em;letter-spacing:-.01em;padding-right:.04em}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.75rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+h2{font-weight:600;font-size:clamp(2rem,4.4vw,4rem);line-height:.98;letter-spacing:-.032em;margin:0;text-wrap:balance}
+p{margin:0}
+:focus-visible{outline:2px solid var(--aqua-400);outline-offset:3px}
+
+/* ---------- Palco ---------- */
+.stage{position:relative;min-height:clamp(560px,86svh,880px);overflow:hidden;isolation:isolate;border-bottom:1px solid var(--rule);background:var(--bg);transition:background .9s var(--expo)}
+.stage.is-violet{background:var(--violet-500)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
+.stage .wrap{position:relative;min-height:inherit;display:grid;grid-template-rows:auto 1fr auto;gap:24px;padding-block:20px 24px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;color:var(--fg)}
+.brand svg{height:34px;width:auto}
+.tag{font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--rule);border-radius:999px;color:var(--muted);background:rgba(15,31,36,.5);backdrop-filter:blur(6px)}
+.headline{align-self:end;max-width:min(100%,1100px)}
+.headline h1{margin:0;font-weight:600;font-size:clamp(3.1rem,9.4vw,9.75rem);line-height:.88;letter-spacing:-.045em}
+.headline h1 span{display:block}
+.headline h1 .impact{color:var(--violet-400);font-size:1.1em;line-height:.9}
+.stage.is-violet .headline h1 .impact{color:var(--bone)}
+.headline .lead{margin-top:20px;font-size:clamp(1.05rem,1.5vw,1.4rem);max-width:40ch;color:var(--bone);line-height:1.4;text-wrap:pretty}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ctl{font:600 .875rem/1 var(--sans);color:var(--fg);background:rgba(15,31,36,.55);border:1px solid rgba(143,168,175,.35);border-radius:999px;padding:12px 16px;cursor:pointer;backdrop-filter:blur(6px);transition:border-color .3s,background .3s}
+.ctl:hover{border-color:var(--violet-300)}
+.ctl[aria-pressed="true"]{background:var(--fg);color:var(--petrol-950);border-color:var(--fg)}
+.hint{font-size:.8125rem;color:var(--muted);margin-left:auto}
+.stage.is-violet .hint,.stage.is-violet .tag{color:var(--bone)}
+
+/* ---------- Fichas ---------- */
+section.sheet{padding-block:clamp(64px,9vw,128px);border-bottom:1px solid var(--rule)}
+.sheet-head{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;margin-bottom:clamp(32px,5vw,64px)}
+.sheet-head .eyebrow{grid-column:1/4}
+.sheet-head h2{grid-column:4/11}
+.sheet-head p{grid-column:4/10;color:var(--muted);font-size:1.0625rem;max-width:60ch;margin-top:16px}
+@media (max-width:760px){.sheet-head{grid-template-columns:1fr;gap:12px}.sheet-head>*{grid-column:1/-1!important}}
+
+/* Logo */
+.logo-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px}
+.plate{border-radius:20px;padding:clamp(24px,4vw,48px);display:grid;place-items:center;min-height:320px;position:relative}
+.plate.dark{background:var(--petrol-900);border:1px solid var(--rule)}
+.plate.light{background:var(--bone);color:var(--petrol-700)}
+.plate .cap{position:absolute;left:20px;bottom:16px;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.plate.light .cap{color:var(--petrol-700)}
+.plate .replay{position:absolute;right:16px;top:16px}
+.symbol-live{width:min(220px,60%);height:auto;overflow:visible}
+.lockup{width:min(520px,100%);height:auto}
+.plate-row{display:grid;grid-template-rows:1fr 1fr;gap:16px}
+.plate-row .plate{min-height:150px}
+.plate.violet{background:var(--violet-500);color:var(--bone)}
+@media (max-width:760px){.logo-grid{grid-template-columns:1fr}}
+.specs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:32px}
+.specs div{border-top:1px solid var(--rule);padding-top:12px}
+.specs b{display:block;font-weight:600;margin-bottom:4px}
+.specs span{color:var(--muted);font-size:.9375rem}
+@media (max-width:760px){.specs{grid-template-columns:1fr 1fr}}
+
+/* Cores */
+.swatches{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.sw{border-radius:16px;padding:16px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;border:1px solid var(--rule)}
+.sw .n{font-weight:600;font-size:1rem}
+.sw .h{font-size:.8125rem;font-variant-numeric:tabular-nums;opacity:.85}
+.sw .r{font-size:.75rem;opacity:.85}
+.sw.big{grid-column:span 4;min-height:240px}
+.sw.mid{grid-column:span 3}
+.sw.sm{grid-column:span 2;min-height:150px}
+@media (max-width:900px){.sw.big{grid-column:span 6}.sw.mid{grid-column:span 6}.sw.sm{grid-column:span 4}}
+@media (max-width:520px){.sw.big,.sw.mid{grid-column:span 12}.sw.sm{grid-column:span 6}}
+.note{margin-top:24px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:start;padding:20px;border-radius:16px;background:var(--petrol-900);border:1px solid var(--rule)}
+.note .dot{width:10px;height:10px;border-radius:50%;background:var(--aqua-400);margin-top:8px}
+.note p{color:var(--bone);max-width:75ch}
+.note p+p{margin-top:8px;color:var(--muted)}
+
+/* Escala */
+.scale{display:grid;gap:0}
+.row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,8fr) minmax(0,2fr);gap:24px;align-items:baseline;padding-block:20px;border-top:1px solid var(--rule)}
+.row .k{font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row .v{font-size:.8125rem;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.row .s{min-width:0;overflow-wrap:anywhere}
+@media (max-width:760px){.row{grid-template-columns:1fr}.row .v{text-align:left}}
+.t-display{font-weight:600;font-size:clamp(3.4rem,10vw,10.5rem);line-height:.88;letter-spacing:-.045em}
+.t-h1{font-weight:600;font-size:clamp(2.6rem,7vw,7.25rem);line-height:.92;letter-spacing:-.04em}
+.t-h2{font-weight:600;font-size:clamp(2.1rem,4.8vw,4.75rem);line-height:.98;letter-spacing:-.032em}
+.t-h3{font-weight:600;font-size:clamp(1.6rem,2.6vw,2.6rem);line-height:1.04;letter-spacing:-.022em}
+.t-man{font-weight:500;font-size:clamp(1.9rem,4.2vw,4.25rem);line-height:1.06;letter-spacing:-.028em}
+.t-lead{font-size:clamp(1.125rem,1.55vw,1.5rem);line-height:1.4;max-width:40ch}
+.t-body{font-size:clamp(1rem,1.05vw,1.125rem);line-height:1.6;max-width:62ch}
+.t-eye{font-size:.8125rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+.t-stat{font-weight:600;font-size:clamp(4rem,12vw,12rem);line-height:.85;letter-spacing:-.05em;color:var(--aqua-400);font-variant-numeric:tabular-nums}
+.dim{opacity:.18;transition:opacity .4s}
+
+/* Componentes */
+.comp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.comp{grid-template-columns:1fr}}
+.card{border:1px solid var(--rule);border-radius:20px;padding:24px;background:var(--petrol-900);display:grid;gap:14px;align-content:start}
+.card h3{margin:0;font-size:1.375rem;font-weight:600;letter-spacing:-.015em}
+.card .src{font-size:.8125rem;color:var(--aqua-400);overflow-wrap:anywhere}
+.card p{color:var(--bone);font-size:.9375rem}
+.card .adapt{color:var(--muted);font-size:.9375rem;border-top:1px solid var(--rule);padding-top:12px}
+.card .where{display:flex;gap:6px;flex-wrap:wrap}
+.card .where span{font-size:.75rem;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--petrol-800);color:var(--bone)}
+.decide{margin-top:32px;padding:clamp(24px,4vw,40px);border-radius:20px;background:var(--violet-500);color:#fff;display:grid;gap:14px}
+.decide h3{margin:0;font-size:clamp(1.5rem,2.6vw,2.25rem);font-weight:600;letter-spacing:-.02em;line-height:1.05}
+.decide p{max-width:70ch}
+.decide ol{margin:0;padding-left:1.2em;display:grid;gap:8px;max-width:75ch}
+footer{padding-block:48px;color:var(--muted);font-size:.875rem}
+
+/* Logo animado */
+.symbol-live .om-layer{stroke-dasharray:1;stroke-dashoffset:1}
+@media (prefers-reduced-motion:reduce){.symbol-live .om-layer{stroke-dashoffset:0}.stage{transition:none}}
+</style>
+
+<section class="stage" id="stage" aria-label="Protótipo do fundo interativo">
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">{{LOCKUP}}</div>
+      <span class="tag">Etapa 1 · protótipo vivo</span>
+    </div>
+    <div class="headline" id="quiet">
+      <h1><span>Performance.</span><span>Reequilíbrio.</span><span class="impact">Bem-estar.</span></h1>
+      <p class="lead">Fisioterapia, massoterapia e pilates em Resende. O corpo em harmonia.</p>
+    </div>
+    <div class="controls" role="group" aria-label="Controles do protótipo">
+      <button class="ctl" id="btn-theme" aria-pressed="false">Ver na seção violeta</button>
+      <button class="ctl" id="btn-pulse">Simular toque</button>
+      <button class="ctl" id="btn-quiet" aria-pressed="true">Zona de leitura</button>
+      <button class="ctl" id="btn-rm" aria-pressed="false">Movimento reduzido</button>
+      <span class="hint" id="hint">Mova o cursor. Clique para gerar uma onda. Role a página para girar o campo.</span>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="eyebrow">01 · Logo recriado</span>
+      <h2>Quatro camadas, <span class="impact">um</span> traço.</h2>
+      <p>Squircles de verdade (superelipse, n = 4,2), não retângulos com canto arredondado. As camadas mantêm espaçamento constante e traço uniforme. O wordmark está convertido em curvas, então o arquivo não depende da fonte instalada.</p>
+    </div>
+    <div class="logo-grid">
+      <div class="plate dark">
+        <button class="ctl replay" id="btn-replay">Repetir animação</button>
+        {{SYMBOL_LIVE}}
+        <span class="cap">Assinatura: desenho de dentro para fora + respiração</span>
+      </div>
+      <div class="plate-row">
+        <div class="plate light">{{LOCKUP_LIGHT}}<span class="cap">Sobre bone</span></div>
+        <div class="plate violet">{{LOCKUP_VIOLET}}<span class="cap" style="color:var(--bone)">Sobre violeta</span></div>
+      </div>
+    </div>
+    <div class="specs">
+      <div><b>Base</b><span>Superelipse n = 4,6 em petrol-700</span></div>
+      <div><b>Camadas</b><span>4, meio-lados 12 / 23 / 34 / 45, traço 3,4</span></div>
+      <div><b>Wordmark</b><span>General Sans 600, tracking 0,28em, em curvas</span></div>
+      <div><b>Área mínima</b><span>Símbolo 24 px · Horizontal 120 px</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="eyebrow">02 · Tokens de cor</span>
+      <h2>Petróleo de base, violeta com <span class="impact">área</span> de verdade.</h2>
+      <p>Os contrastes abaixo são WCAG reais, medidos contra o fundo onde cada cor vai trabalhar. Acrescentei três tons de apoio (petrol-900, petrol-500, petrol-300) e um violeta intermediário, explicado na nota.</p>
+    </div>
+    <div class="swatches">
+      <div class="sw big" style="background:#0F1F24"><span class="n">petrol-950</span><span><span class="h">#0F1F24</span><br><span class="r">Fundo escuro. Bone sobre ele: 15,0:1</span></span></div>
+      <div class="sw big" style="background:#2E4A54"><span class="n">petrol-700</span><span><span class="h">#2E4A54</span><br><span class="r">Cor do logo. Sobre bone: 8,4:1</span></span></div>
+      <div class="sw big" style="background:#5B3FE0;color:#fff"><span class="n">violet-500</span><span><span class="h">#5B3FE0</span><br><span class="r">Seções cheias. Branco sobre ele: 6,5:1</span></span></div>
+      <div class="sw mid" style="background:#F4F1EC;color:#0F1F24"><span class="n">bone</span><span><span class="h">#F4F1EC</span><br><span class="r">Seções claras. Petrol-950 sobre ele: 15,0:1</span></span></div>
+      <div class="sw mid" style="background:#1F3A43"><span class="n">petrol-800</span><span><span class="h">#1F3A43</span><br><span class="r">Superfícies. Bone: 10,7:1</span></span></div>
+      <div class="sw mid" style="background:#9C8BF2;color:#0F1F24"><span class="n">violet-300</span><span><span class="h">#9C8BF2</span><br><span class="r">Texto violeta no escuro: 5,95:1</span></span></div>
+      <div class="sw mid" style="background:#5EE6D8;color:#0F1F24"><span class="n">aqua-400</span><span><span class="h">#5EE6D8</span><br><span class="r">Números e brilhos: 11,1:1 no escuro</span></span></div>
+      <div class="sw sm" style="background:#7D63F2;color:#0F1F24"><span class="n">violet-400</span><span class="h">#7D63F2 · novo</span></div>
+      <div class="sw sm" style="background:#D9B98C;color:#0F1F24"><span class="n">wood</span><span class="h">#D9B98C · detalhes</span></div>
+      <div class="sw sm" style="background:#16292F"><span class="n">petrol-900</span><span class="h">#16292F · novo</span></div>
+      <div class="sw sm" style="background:#4F6F79"><span class="n">petrol-500</span><span class="h">#4F6F79 · linhas</span></div>
+      <div class="sw sm" style="background:#8FA8AF;color:#0F1F24"><span class="n">petrol-300</span><span class="h">#8FA8AF · texto 2º</span></div>
+      <div class="sw sm" style="background:#E9E3D9;color:#0F1F24"><span class="n">bone-200</span><span class="h">#E9E3D9 · novo</span></div>
+    </div>
+    <div class="note">
+      <span class="dot" aria-hidden="true"></span>
+      <div>
+        <p>O violeta #5B3FE0 sobre o petróleo #0F1F24 dá 2,60:1 e reprova AA mesmo em título grande (mínimo 3:1). Por isso o "Bem-estar." da hero usa violet-400 (#7D63F2, 3,98:1), que mantém o elétrico e passa para texto grande. Texto violeta em tamanho de leitura usa violet-300.</p>
+        <p>O violet-500 continua sendo a cor da marca: é ele que pinta as seções inteiras (Performance e Presenteie), onde o texto vai em branco ou bone (6,5:1 e 5,8:1).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="eyebrow">03 · Escala tipográfica</span>
+      <h2>Sans que <span class="impact">segura</span>, serif que acende.</h2>
+      <p>Fluida com clamp(), mínimo em 390 px e máximo em 1440 px. O serif itálico entra sempre dentro da frase em sans e ganha 8% de tamanho para compensar a altura-x menor.</p>
+    </div>
+    <div class="scale">
+      <div class="row"><span class="k">Display</span><span class="s t-display">Bem-<span class="impact">estar.</span></span><span class="v">54 → 168 px · 600 · −4,5%</span></div>
+      <div class="row"><span class="k">H1</span><span class="s t-h1">Dê de presente uma <span class="impact">pausa.</span></span><span class="v">42 → 116 px · 600 · −4%</span></div>
+      <div class="row"><span class="k">H2</span><span class="s t-h2">Seu pescoço vive <span class="impact">tenso?</span></span><span class="v">34 → 76 px · 600 · −3,2%</span></div>
+      <div class="row"><span class="k">H3</span><span class="s t-h3">Sempre muito <span class="impact">travada?</span></span><span class="v">26 → 42 px · 600 · −2,2%</span></div>
+      <div class="row"><span class="k">Manifesto</span><span class="s t-man" id="man">A gente trata a dor, devolve o movimento e te ensina a manter isso. Porque o verdadeiro <span class="impact">luxo</span> é desacelerar.</span><span class="v">30 → 68 px · 500 · scrub 0,15 → 1</span></div>
+      <div class="row"><span class="k">Lead</span><span class="s t-lead">Fisioterapia, massoterapia e pilates em Resende. O corpo em harmonia.</span><span class="v">18 → 24 px · 500</span></div>
+      <div class="row"><span class="k">Corpo</span><span class="s t-body">Tratamos a dor do dia a dia e a lesão do atleta com o mesmo cuidado: avaliação de verdade, plano claro e acompanhamento até você voltar a se mexer sem pensar nisso.</span><span class="v">16 → 18 px · 500 · 1,6</span></div>
+      <div class="row"><span class="k">Eyebrow</span><span class="s t-eye">Fisioterapia esportiva</span><span class="v">13 px · 600 · +16%</span></div>
+      <div class="row"><span class="k">Número</span><span class="s t-stat">5,0</span><span class="v">64 → 192 px · aqua-400</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="eyebrow">04 · 21st.dev</span>
+      <h2>Componentes como <span class="impact">ponto de partida.</span></h2>
+      <p>Escolhidos pela estrutura e acessibilidade, não pelo visual: todos vão ser redesenhados com os tokens acima.</p>
+    </div>
+    <div class="comp">
+      <article class="card">
+        <h3>Botão magnético</h3>
+        <span class="src">ibelick/magnetic</span>
+        <p>É um comportamento, não um botão pronto: envolve qualquer elemento. Ideal para as três portas de agendamento, que precisam do nosso desenho e não de um estilo de biblioteca.</p>
+        <p class="adapt">Adaptação: atração com gsap.quickTo, rótulo que desliza na direção oposta (profundidade), ícone do WhatsApp que gira 12°. Desligado no toque e com movimento reduzido.</p>
+        <div class="where"><span>Hero</span><span>Serviços</span><span>CTA final</span></div>
+      </article>
+      <article class="card">
+        <h3>Marquee</h3>
+        <span class="src">diceui/marquee</span>
+        <p>O mais sólido que achei: pausa no hover, direção reversa, suporte a leitor de tela e animação em CSS puro (zero JavaScript rodando por frame).</p>
+        <p class="adapt">Adaptação: tipografia gigante alternando sans e serif itálico, separador com o squircle do logo, velocidade que acelera com o scroll. Em movimento reduzido vira uma linha estática.</p>
+        <div class="where"><span>Performance</span><span>Depoimentos (duplo)</span></div>
+      </article>
+      <article class="card">
+        <h3>Card com spotlight</h3>
+        <span class="src">jahed/spotlight-card</span>
+        <p>Sem dependências, brilho que segue o cursor. Base boa para cards grandes de equipe, onde o hover precisa revelar a especialidade.</p>
+        <p class="adapt">Adaptação: o brilho vira um squircle água-marinha (não um círculo), foto em duotone petróleo e violeta que ganha cor no hover, cursor "Ver".</p>
+        <div class="where"><span>Equipe</span><span>Resultado do quiz</span></div>
+      </article>
+      <article class="card">
+        <h3>Accordion</h3>
+        <span class="src">shadcn/accordion (Radix)</span>
+        <p>Radix resolve teclado, aria-expanded e foco. As alternativas animadas dependem de Motion, que seria uma segunda biblioteca de animação além do GSAP.</p>
+        <p class="adapt">Adaptação: abre com grid-template-rows (suave e sem medir altura), ícone de camadas que se separam ao abrir. Uso: "Antes de agendar", 4 dúvidas no CTA final.</p>
+        <div class="where"><span>CTA final</span><span>Serviços no mobile</span></div>
+      </article>
+      <article class="card">
+        <h3>Texto com reveal no scroll</h3>
+        <span class="src">sajad/scroll-fill-headline</span>
+        <p>A lógica certa para o manifesto: cada palavra acende conforme o scroll. Role até a escala tipográfica acima para ver a versão do manifesto já funcionando.</p>
+        <p class="adapt">Adaptação: reescrito com ScrollTrigger (scrub) para ficar sincronizado com o Lenis. Os títulos usam SplitText com máscara por linha, não fade.</p>
+        <div class="where"><span>Manifesto</span><span>Títulos</span></div>
+      </article>
+      <article class="card">
+        <h3>Fundos (referência)</h3>
+        <span class="src">satoriui/kinetic-grid · n1m4mz/sonar-grid</span>
+        <p>Kinetic Grid mostrou o caminho da grade que reage ao cursor. Sonar Grid inspirou a onda do toque no celular.</p>
+        <p class="adapt">O campo de squircles acima é original: nenhum código desses dois foi usado, porque nenhum deles tem o desenho do logo nem a física de mola.</p>
+        <div class="where"><span>Hero</span><span>Performance</span><span>CTA final</span></div>
+      </article>
+    </div>
+    <div class="decide">
+      <h3>Uma decisão sua antes da Etapa 2</h3>
+      <p>O registro do 21st.dev passou a exigir chave de API para instalar (testei: sem chave volta 403). Além disso, 4 dos 5 componentes animados dependem do Motion, e o site já usa GSAP.</p>
+      <ol>
+        <li><b>Recomendado:</b> portar a lógica desses componentes para GSAP, usando o código deles como referência. Uma biblioteca de animação só, tudo sincronizado com o Lenis, e cerca de 35 kB a menos no celular.</li>
+        <li><b>Instalar pelo registro:</b> você gera uma chave em 21st.dev e eu peço por um formulário seguro (nunca pelo chat).</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">OMOPLATA Studio · Resende/RJ · Etapa 1 de 3: fundamentos visuais. Fundo interativo em canvas 2D, 3,6 kB gzip, mesmo código que vai para o site.</div></footer>
+
+<script>{{FIELD_JS}}</script>
+<script>
+(() => {
+  const rmQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const stage = document.getElementById('stage');
+  const canvas = document.getElementById('field');
+  const quiet = document.getElementById('quiet');
+  let reduced = rmQuery.matches;
+  let field;
+  const make = () => {
+    field?.destroy();
+    field = new OMField.SquircleField(canvas, { reducedMotion: reduced, theme: stage.classList.contains('is-violet') ? OMField.THEMES.violet : OMField.THEMES.petrol });
+    if (qBtn.getAttribute('aria-pressed') === 'true') field.setQuietZones([quiet]);
+    field.setScroll(scrollY);
+    field.start();
+  };
+  const qBtn = document.getElementById('btn-quiet');
+  const rmBtn = document.getElementById('btn-rm');
+  rmBtn.setAttribute('aria-pressed', String(reduced));
+  addEventListener('scroll', () => field.setScroll(scrollY), { passive: true });
+
+  document.getElementById('btn-theme').addEventListener('click', (e) => {
+    const on = stage.classList.toggle('is-violet');
+    e.currentTarget.setAttribute('aria-pressed', String(on));
+    e.currentTarget.textContent = on ? 'Voltar ao petróleo' : 'Ver na seção violeta';
+    field.setTheme(on ? OMField.THEMES.violet : OMField.THEMES.petrol);
+  });
+  document.getElementById('btn-pulse').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const r = canvas.getBoundingClientRect();
+    field.pulse(r.width * (0.3 + Math.random() * 0.4), r.height * (0.3 + Math.random() * 0.4));
+  });
+  qBtn.addEventListener('click', () => {
+    const on = qBtn.getAttribute('aria-pressed') !== 'true';
+    qBtn.setAttribute('aria-pressed', String(on));
+    field.setQuietZones(on ? [quiet] : []);
+  });
+  rmBtn.addEventListener('click', () => {
+    reduced = !reduced;
+    rmBtn.setAttribute('aria-pressed', String(reduced));
+    make();
+  });
+  if (matchMedia('(hover: none)').matches) document.getElementById('hint').textContent = 'Toque no fundo para gerar uma onda. Role para girar o campo.';
+  // Começa só depois da primeira pintura (no site: requestIdleCallback)
+  requestAnimationFrame(() => setTimeout(make, 0));
+
+  // ----- Logo: camadas de dentro para fora, depois respira -----
+  const sym = document.querySelector('.symbol-live');
+  const playLogo = () => {
+    if (rmQuery.matches) return;
+    const base = sym.querySelector('.om-base');
+    const layers = [...sym.querySelectorAll('.om-layer')]; // já em ordem: interna -> externa
+    base.animate([{ opacity: 0, transform: 'scale(.92)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 500, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'both' });
+    layers.forEach((p, i) => p.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 560, delay: 160 + i * 140, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'both' }));
+    const end = 160 + (layers.length - 1) * 140 + 560;
+    sym.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.03)' }, { transform: 'scale(1)' }], { duration: 900, delay: end, easing: 'cubic-bezier(.65,0,.35,1)' });
+  };
+  sym.style.transformOrigin = '50% 50%';
+  sym.querySelector('.om-base').style.transformOrigin = '50% 50%';
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { playLogo(); io.disconnect(); } }, { threshold: .5 });
+  io.observe(sym);
+  document.getElementById('btn-replay').addEventListener('click', playLogo);
+
+  // ----- Manifesto: palavra por palavra no scroll -----
+  const man = document.getElementById('man');
+  const walk = (node) => {
+    [...node.childNodes].forEach((n) => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach((t) => {
+          if (!t) return;
+          if (/^\s+$/.test(t)) frag.append(t);
+          else { const s = document.createElement('span'); s.className = 'w'; s.textContent = t; frag.append(s); }
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1) { n.classList.add('w'); }
+    });
+  };
+  if (!rmQuery.matches) {
+    walk(man);
+    const words = [...man.querySelectorAll('.w')];
+    const upd = () => {
+      const r = man.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (innerHeight * 0.85 - r.top) / (r.height + innerHeight * 0.45)));
+      words.forEach((w, i) => { w.style.opacity = (i / words.length) < p ? 1 : 0.15; });
+    };
+    words.forEach((w) => (w.style.transition = 'opacity .35s'));
+    addEventListener('scroll', upd, { passive: true });
+    upd();
+  }
+})();
+</script>

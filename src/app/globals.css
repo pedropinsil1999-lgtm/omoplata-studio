@@ -1,26 +1,126 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   OMOPLATA Studio · Design tokens
+   Tailwind v4: tudo que está em @theme vira utilitário (bg-petrol-950,
+   text-display, ease-expo-out...) e variável CSS (--color-petrol-950).
+   ========================================================================== */
+
+@theme {
+  /* --- Cor ------------------------------------------------------------- */
+  --color-petrol-950: #0f1f24; /* fundo mais escuro */
+  --color-petrol-900: #16292f; /* degrau entre 950 e 800 (cards no escuro) */
+  --color-petrol-800: #1f3a43;
+  --color-petrol-700: #2e4a54; /* cor do logo, base da marca */
+  --color-petrol-500: #4f6f79; /* linhas do campo interativo em repouso */
+  --color-petrol-300: #8fa8af; /* texto secundário sobre escuro (AA 6.75:1 no 950) */
+
+  --color-violet-500: #5b3fe0; /* violeta elétrico: áreas cheias, botões */
+  --color-violet-400: #7d63f2; /* SÓ display grande sobre petrol-950 (3.98:1) */
+  --color-violet-300: #9c8bf2; /* texto violeta sobre escuro (5.95:1) */
+
+  --color-aqua-400: #5ee6d8; /* brilhos, números, detalhes */
+  --color-bone: #f4f1ec; /* seções claras */
+  --color-bone-200: #e9e3d9; /* divisórias e cards sobre bone */
+  --color-wood: #d9b98c; /* madeira do Omoplata Hub, só detalhes */
+
+  /* --- Tipografia ------------------------------------------------------ */
+  --font-sans: var(--font-general-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  /* Escala fluida: min em 390px, máx em 1440px */
+  --text-display: clamp(3.4rem, 10vw, 10.5rem);
+  --text-display--line-height: 0.88;
+  --text-display--letter-spacing: -0.045em;
+  --text-display--font-weight: 600;
+
+  --text-h1: clamp(2.6rem, 7vw, 7.25rem);
+  --text-h1--line-height: 0.92;
+  --text-h1--letter-spacing: -0.04em;
+  --text-h1--font-weight: 600;
+
+  --text-h2: clamp(2.1rem, 4.8vw, 4.75rem);
+  --text-h2--line-height: 0.98;
+  --text-h2--letter-spacing: -0.032em;
+  --text-h2--font-weight: 600;
+
+  --text-h3: clamp(1.6rem, 2.6vw, 2.6rem);
+  --text-h3--line-height: 1.04;
+  --text-h3--letter-spacing: -0.022em;
+  --text-h3--font-weight: 600;
+
+  --text-manifesto: clamp(1.9rem, 4.2vw, 4.25rem);
+  --text-manifesto--line-height: 1.06;
+  --text-manifesto--letter-spacing: -0.028em;
+  --text-manifesto--font-weight: 500;
+
+  --text-lead: clamp(1.125rem, 1.55vw, 1.5rem);
+  --text-lead--line-height: 1.4;
+  --text-lead--letter-spacing: -0.008em;
+
+  --text-body: clamp(1rem, 1.05vw, 1.125rem);
+  --text-body--line-height: 1.6;
+
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.16em;
+  --text-eyebrow--font-weight: 600;
+
+  --text-stat: clamp(4rem, 12vw, 12rem); /* count-up 5,0 */
+  --text-stat--line-height: 0.85;
+  --text-stat--letter-spacing: -0.05em;
+
+  /* --- Movimento (espelham os eases do GSAP) --------------------------- */
+  --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-power3-inout: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* --- Forma ----------------------------------------------------------- */
+  --radius-squircle: 28%; /* fallback para quando não usamos o path SVG */
+  --radius-card: 1.25rem; /* cantos discretos: evita o ar "infantil" */
+  --radius-pill: 999px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Palavra de impacto: sempre dentro da frase em sans.
+   O serif itálico tem x-height menor: compensamos 8% no tamanho. */
+.impact {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.08em;
+  letter-spacing: -0.01em;
+  padding-right: 0.04em; /* o itálico não "bate" na pontuação */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-petrol-950);
+  color: var(--color-bone);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+
+::selection {
+  background: var(--color-violet-500);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-aqua-400);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
