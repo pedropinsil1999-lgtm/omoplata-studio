@@ -22,19 +22,19 @@ export type FieldTheme = {
 export const THEMES = {
   petrol: {
     line: "#4f6f79",
-    lineAlpha: 0.5,
+    lineAlpha: 0.2,
     active: "#7d63f2",
     peak: "#9c8bf2",
     halo: "#5ee6d8",
-    haloAlpha: 0.075,
+    haloAlpha: 0.045,
   },
   violet: {
     line: "#8f7af0",
-    lineAlpha: 0.55,
+    lineAlpha: 0.24,
     active: "#c9bfff",
     peak: "#ffffff",
     halo: "#5ee6d8",
-    haloAlpha: 0.12,
+    haloAlpha: 0.065,
   },
 } satisfies Record<string, FieldTheme>;
 
@@ -326,7 +326,7 @@ export class SquircleField {
       const col = k < 0.6 ? mix(line, act, smooth(k / 0.6)) : mix(act, peak, smooth((k - 0.6) / 0.4));
       const row: string[] = [];
       for (let a = 0; a < ALPHA_LEVELS; a++) {
-        const quietMul = [1, 0.55, 0.28][a];
+        const quietMul = [1, 0.32, 0.1][a];
         const alpha = (t.lineAlpha + (1 - t.lineAlpha) * k * 0.9) * quietMul;
         row.push(col.replace("rgb(", "rgba(").replace(")", `,${alpha.toFixed(3)})`));
       }

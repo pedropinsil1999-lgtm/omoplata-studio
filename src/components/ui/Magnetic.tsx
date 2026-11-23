@@ -1,67 +1,17 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion, isTouch } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 import { DOORS, ctaData, wa, type Service } from "@/lib/site";
 
 /**
- * Efeito magnético (porte do Magnetic do 21st.dev para gsap.quickTo).
- * O invólucro é atraído pelo cursor; o filho [data-magnetic-inner] vai
- * um pouco mais longe, o que dá sensação de profundidade.
- * Desligado no toque e com movimento reduzido.
+ * Invólucro estático dos CTAs (sem seguir o cursor, a pedido do cliente).
+ * Mantém só o nome "Magnetic" para não mexer em todo lugar que o usa;
+ * o hover de troca de texto continua, por ser um detalhe parado, não um
+ * botão que persegue o mouse.
  */
-export function Magnetic({
-  children,
-  className,
-  strength = 0.32,
-  range = 1.4,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  strength?: number;
-  range?: number;
-}) {
-  const ref = useRef<HTMLSpanElement>(null);
-  useGSAP(
-    () => {
-      const el = ref.current!;
-      if (prefersReducedMotion() || isTouch()) return;
-      const inner = el.querySelector<HTMLElement>("[data-magnetic-inner]");
-      const xTo = gsap.quickTo(el, "x", { duration: 0.9, ease: "elastic.out(1, 0.45)" });
-      const yTo = gsap.quickTo(el, "y", { duration: 0.9, ease: "elastic.out(1, 0.45)" });
-      const ixTo = inner && gsap.quickTo(inner, "x", { duration: 0.9, ease: "elastic.out(1, 0.45)" });
-      const iyTo = inner && gsap.quickTo(inner, "y", { duration: 0.9, ease: "elastic.out(1, 0.45)" });
-      const move = (e: PointerEvent) => {
-        const r = el.getBoundingClientRect();
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
-        const reach = Math.max(r.width, r.height) * range;
-        if (Math.hypot(dx, dy) > reach) return leave();
-        xTo(dx * strength);
-        yTo(dy * strength);
-        ixTo?.(dx * strength * 0.45);
-        iyTo?.(dy * strength * 0.45);
-      };
-      const leave = () => {
-        xTo(0);
-        yTo(0);
-        ixTo?.(0);
-        iyTo?.(0);
-      };
-      window.addEventListener("pointermove", move, { passive: true });
-      el.addEventListener("pointerleave", leave);
-      return () => {
-        window.removeEventListener("pointermove", move);
-        el.removeEventListener("pointerleave", leave);
-      };
-    },
-    { scope: ref },
-  );
+export function Magnetic({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <span ref={ref} className={cn("inline-block will-change-transform", className)}>
+    <span className={cn("inline-block", className)}>
       {children}
     </span>
   );

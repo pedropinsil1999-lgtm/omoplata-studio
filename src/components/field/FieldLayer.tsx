@@ -68,7 +68,7 @@ export function FieldLayer() {
       const apply = () => {
         const on = activeSet.size > 0;
         const top = [...activeSet].pop();
-        gsap.to(canvas, { opacity: on ? 1 : 0, duration: reduced ? 0 : 0.8, ease: "power3.inOut", overwrite: true });
+        gsap.to(canvas, { opacity: on ? 0.55 : 0, duration: reduced ? 0 : 0.8, ease: "power3.inOut", overwrite: true });
         if (top) field?.setTheme(top.dataset.field === "violet" ? THEMES.violet : THEMES.petrol);
         field?.setActive(on);
       };

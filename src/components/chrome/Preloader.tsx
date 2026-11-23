@@ -39,20 +39,16 @@ export function Preloader() {
       return;
     }
     html.style.overflow = "hidden";
-    const layers = sym.current!.querySelectorAll('[data-logo="layer"]');
-    const base = sym.current!.querySelector('[data-logo="base"]');
+    const bg = sym.current!.querySelector('[data-logo="bg"]');
+    const ink = sym.current!.querySelector('[data-logo="ink"]');
     const tl = gsap.timeline({ onComplete: () => el.remove() });
     tl.add(drawSymbol(sym.current!, { speed: 1.55, breathe: false }))
       // respira uma vez
       .to(sym.current, { scale: 1.03, duration: 0.18, ease: "power3.inOut", yoyo: true, repeat: 1, transformOrigin: "50% 50%" })
-      // saída: camadas se expandem para fora (a externa primeiro) até cobrir a tela
+      // saída: a marca se expande até cobrir a tela e o símbolo "vira" o fundo
       .addLabel("out")
-      .to(base, { opacity: 0, duration: 0.3, ease: "power3.inOut" }, "out")
-      .to(
-        [...layers].reverse(),
-        { scale: (i: number) => 26 - i * 3.5, opacity: 0, strokeWidth: 0.6, duration: 0.55, ease: "expo.in", stagger: 0.035 },
-        "out",
-      )
+      .to(bg, { opacity: 0, duration: 0.3, ease: "power3.inOut" }, "out")
+      .to(ink, { scale: 22, opacity: 0, duration: 0.6, ease: "expo.in" }, "out")
       .to(el, { backgroundColor: "rgba(15,31,36,0)", duration: 0.4, ease: "power3.inOut" }, "out+=0.18")
       .add(() => {
         onField((f) => f.pulse(innerWidth / 2, innerHeight / 2));

@@ -3,15 +3,16 @@
 import { forwardRef, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
-import { SYMBOL_LAYERS, SYMBOL_OUTER, WORDMARK } from "./logo-paths";
+import { BG_OUTER, INK_PATH, WORDMARK } from "./logo-paths";
 
 /**
- * Símbolo OMOPLATA. ÚNICO lugar onde o desenho do logo vive:
- * trocar o vetor aqui atualiza preloader, menu, cortina e rodapé.
+ * Símbolo OMOPLATA: traçado real do arquivo do cliente (rastreado com potrace em
+ * scripts/rastrear-logo.cjs), não mais gerado por fórmula. ÚNICO lugar onde o
+ * desenho do logo vive: trocar o vetor aqui atualiza preloader, menu, cortina e rodapé.
  */
 type SymbolProps = {
   className?: string;
-  /** "solid": base petróleo + linhas brancas. "line": só traço, herda currentColor. */
+  /** "solid": placa petróleo + marca branca. "line": só a marca, herda currentColor. */
   variant?: "solid" | "line";
   title?: string;
 };
@@ -30,40 +31,47 @@ export const LogoSymbol = forwardRef<SVGSVGElement, SymbolProps>(function LogoSy
       aria-label={title}
       aria-hidden={title ? undefined : true}
     >
+      {solid && <path data-logo="bg" d={BG_OUTER} fill="#2E4A54" style={{ transformOrigin: "60px 60px" }} />}
+      {/* contorno fino: só visível durante a animação de "desenhar" */}
       <path
-        data-logo="base"
-        d={SYMBOL_OUTER}
-        fill={solid ? "#2E4A54" : "none"}
-        stroke={solid ? "none" : "currentColor"}
-        strokeWidth={solid ? 0 : 2}
+        data-logo="outline"
+        d={INK_PATH}
+        fill="none"
+        stroke={solid ? "#fff" : "currentColor"}
+        strokeWidth={1.4}
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        opacity={0}
         style={{ transformOrigin: "60px 60px" }}
       />
-      {SYMBOL_LAYERS.map((d, i) => (
-        <path
-          key={i}
-          data-logo="layer"
-          d={d}
-          fill="none"
-          stroke={solid ? "#fff" : "currentColor"}
-          strokeWidth={3.4}
-          strokeLinejoin="round"
-          pathLength={1}
-          style={{ transformOrigin: "60px 60px" }}
-        />
-      ))}
+      {/* marca sólida (traçado real, preenchido) */}
+      <path
+        data-logo="ink"
+        d={INK_PATH}
+        fill={solid ? "#fff" : "currentColor"}
+        fillRule="evenodd"
+        style={{ transformOrigin: "60px 60px" }}
+      />
     </svg>
   );
 });
 
-/** Timeline de assinatura: camadas de dentro para fora, depois respira (1 → 1,03 → 1). */
+/** Timeline de assinatura: o contorno se desenha, a marca preenche, depois respira (1 → 1,03 → 1). */
 export function drawSymbol(svg: SVGSVGElement, opts: { speed?: number; breathe?: boolean } = {}) {
   const speed = opts.speed ?? 1;
-  const base = svg.querySelector('[data-logo="base"]');
-  const layers = svg.querySelectorAll('[data-logo="layer"]');
+  const bg = svg.querySelector('[data-logo="bg"]');
+  const outline = svg.querySelector<SVGPathElement>('[data-logo="outline"]');
+  const ink = svg.querySelector('[data-logo="ink"]');
   const tl = gsap.timeline();
-  tl.set(layers, { strokeDasharray: 1, strokeDashoffset: 1 })
-    .fromTo(base, { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5 / speed, ease: "expo.out" }, 0)
-    .to(layers, { strokeDashoffset: 0, duration: 0.5 / speed, ease: "power3.inOut", stagger: 0.12 / speed }, 0.12 / speed);
+  if (bg) tl.fromTo(bg, { scale: 0.92, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45 / speed, ease: "expo.out" }, 0);
+  if (outline) {
+    const len = outline.getTotalLength();
+    tl.set(outline, { opacity: 1, strokeDasharray: len, strokeDashoffset: len })
+      .set(ink, { opacity: 0 })
+      .to(outline, { strokeDashoffset: 0, duration: 0.85 / speed, ease: "power3.inOut" }, 0.1 / speed)
+      .to(ink, { opacity: 1, duration: 0.3 / speed, ease: "power2.out" }, `-=${0.22 / speed}`)
+      .to(outline, { opacity: 0, duration: 0.25 / speed }, "<");
+  }
   if (opts.breathe !== false)
     tl.to(svg, { scale: 1.03, duration: 0.35 / speed, ease: "power3.inOut", yoyo: true, repeat: 1, transformOrigin: "50% 50%" });
   return tl;
