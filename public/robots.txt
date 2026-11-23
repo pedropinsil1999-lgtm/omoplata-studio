@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://omoplatastudio.com.br/sitemap.xml

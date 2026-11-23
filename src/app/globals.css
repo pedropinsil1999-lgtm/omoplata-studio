@@ -81,14 +81,17 @@
 }
 
 /* Palavra de impacto: sempre dentro da frase em sans.
-   O serif itálico tem x-height menor: compensamos 8% no tamanho. */
-.impact {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 1.08em;
-  letter-spacing: -0.01em;
-  padding-right: 0.04em; /* o itálico não "bate" na pontuação */
+   O serif itálico tem x-height menor: compensamos 8% no tamanho.
+   Fica em @layer components para os utilitários (text-*) poderem sobrescrever. */
+@layer components {
+  .impact {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.08em;
+    letter-spacing: -0.01em;
+    padding-right: 0.04em;
+  }
 }
 
 html {
@@ -124,3 +127,64 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------- Estados iniciais controlados por JS (com rede de segurança) ---------- */
+.js [data-reveal]:not([data-reveal="hero"]),
+.js[data-intro="skip"] [data-reveal="hero"] {
+  visibility: hidden;
+  animation: failsafe-visible 0s 3.2s forwards;
+}
+/* Na 1ª visita a hero é pintada por baixo do preloader (LCP cedo);
+   o GSAP aplica o estado inicial das máscaras antes do preloader sair. */
+@keyframes failsafe-visible {
+  to { visibility: visible; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { visibility: visible; animation: none; }
+}
+/* máscara do SplitText: folga para descendentes e itálico não cortarem */
+.ln-mask {
+  padding: 0 0.12em 0.1em 0;
+  margin: 0 -0.12em -0.1em 0;
+}
+
+/* Preloader: começa já no estado "antes do desenho"; some sozinho se o JS falhar */
+#preloader [data-logo="layer"] { stroke-dasharray: 1; stroke-dashoffset: 1; }
+#preloader [data-logo="base"] { opacity: 0; }
+#preloader { animation: preloader-failsafe 0.4s 4s forwards; }
+@keyframes preloader-failsafe { to { opacity: 0; visibility: hidden; } }
+[data-intro="skip"] #preloader { display: none; }
+
+/* Seções: cor própria sem JS; com JS a cor vem do <html> (transição entre seções) */
+.js [data-bg],
+.js [data-bg] > :is(section, footer) { background-color: transparent !important; }
+
+/* Grain sutil das seções claras */
+.grain { position: relative; }
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .06 0 0 0 0 .12 0 0 0 0 .14 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Duotone petróleo/violeta: sombras em petróleo, luzes em violeta claro */
+.duotone { position: relative; background: #a998f6; isolation: isolate; }
+.duotone img { filter: grayscale(1) contrast(1.12) brightness(1.12); mix-blend-mode: multiply; transition: filter 0.8s var(--ease-expo-out); }
+.duotone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #23404a;
+  mix-blend-mode: lighten;
+  pointer-events: none;
+  transition: opacity 0.8s var(--ease-expo-out);
+}
+
+html { scrollbar-gutter: stable; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }

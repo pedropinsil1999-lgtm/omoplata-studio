@@ -64,6 +64,7 @@ type Cell = {
 type Ripple = { x: number; y: number; t: number };
 
 const UNIT_STEPS = 44;
+const UNIT_STEPS_LITE = 26; // celular: contorno mais leve, idêntico a olho nu nesse tamanho
 const BUCKETS = 10;
 const ALPHA_LEVELS = 3;
 
@@ -93,6 +94,10 @@ export class SquircleField {
   private o: Required<Omit<FieldOptions, "theme">>;
   private theme: FieldTheme;
   private unit = unitSquircle();
+  private steps = UNIT_STEPS;
+  private coarse = false;
+  private dirty = true;
+  private idleFrames = 0;
   private cells: Cell[] = [];
   private ripples: Ripple[] = [];
   private w = 0;
@@ -103,6 +108,7 @@ export class SquircleField {
   private acc = 0;
   private time = 0;
   private visible = true;
+  private active = true;
   private running = false;
 
   // ponteiro (real e suavizado) e "força" do ponteiro (0 quando sai da tela)
@@ -149,6 +155,7 @@ export class SquircleField {
   /* ------------------------------------------------------------ API --- */
 
   start() {
+    if (!this.active) return;
     if (this.o.reducedMotion) {
       this.draw(); // estático: desenhado uma vez
       return;
@@ -169,15 +176,24 @@ export class SquircleField {
     this.cleanup.forEach((f) => f());
   }
 
+  /** Liga/desliga o loop (ex.: canvas fixo invisível fora das seções com campo) */
+  setActive(on: boolean) {
+    this.active = on;
+    this.syncRunning();
+  }
+
   setTheme(theme: FieldTheme) {
     this.theme = theme;
     this.buildStyles();
+    this.dirty = true;
     if (this.o.reducedMotion) this.draw();
   }
 
   /** Chamado pelo Lenis/ScrollTrigger (ou window.scrollY no protótipo) */
   setScroll(y: number) {
     this.scrollY = y;
+    this.dirty = true;
+    if (this.quietEls.length) this.measureQuiet();
     if (this.o.reducedMotion) {
       this.sScroll = y;
       this.draw();
@@ -192,6 +208,7 @@ export class SquircleField {
 
   /** Onda a partir de um ponto (toque no mobile, clique no desktop, saída do preloader) */
   pulse(x: number, y: number) {
+    this.dirty = true;
     this.ripples.push({ x, y, t: 0 });
     if (this.ripples.length > 6) this.ripples.shift();
   }
@@ -210,6 +227,7 @@ export class SquircleField {
         this.spy = this.py;
       }
       this.pTarget = 1;
+      this.dirty = true;
     };
     const onLeave = () => (this.pTarget = 0);
     const onDown = (e: PointerEvent) => {
@@ -234,8 +252,6 @@ export class SquircleField {
     const onVis = () => this.syncRunning();
     document.addEventListener("visibilitychange", onVis);
 
-    const onScrollMeasure = () => this.measureQuiet();
-    window.addEventListener("scroll", onScrollMeasure, { passive: true });
 
     this.cleanup.push(
       () => window.removeEventListener("pointermove", onMove),
@@ -245,12 +261,11 @@ export class SquircleField {
       () => ro.disconnect(),
       () => io.disconnect(),
       () => document.removeEventListener("visibilitychange", onVis),
-      () => window.removeEventListener("scroll", onScrollMeasure),
     );
   }
 
   private syncRunning() {
-    const shouldRun = this.visible && !document.hidden;
+    const shouldRun = this.visible && this.active && !document.hidden;
     if (shouldRun && !this.running) this.start();
     else if (!shouldRun && this.running) this.stop();
   }
@@ -270,6 +285,9 @@ export class SquircleField {
     this.canvas.height = Math.round(r.height * this.dpr);
     // No celular, células menores para manter a densidade de "revista"
     const cell = this.w < 640 ? Math.max(76, this.o.cell * 0.7) : this.o.cell;
+    this.coarse = window.matchMedia("(pointer: coarse)").matches;
+    this.steps = this.w < 640 || this.coarse ? UNIT_STEPS_LITE : UNIT_STEPS;
+    this.unit = unitSquircle(4.2, this.steps);
     // Grade maior que a tela: ao girar, as bordas nunca aparecem
     const diag = Math.hypot(this.w, this.h);
     const cols = Math.ceil(diag / cell) + 2;
@@ -322,16 +340,26 @@ export class SquircleField {
     this.last = now;
     this.acc += dt;
     const STEP = 1 / 120;
+    let moving = false;
     while (this.acc >= STEP) {
-      this.step(STEP);
+      moving = this.step(STEP) || moving;
       this.acc -= STEP;
     }
-    this.draw();
+    // Repouso: no toque não redesenha; com mouse, a ondulação ambiente cai para ~15 fps
+    if (moving || this.dirty) {
+      this.idleFrames = 0;
+      this.draw();
+    } else if (!this.coarse && ++this.idleFrames % 4 === 0) {
+      this.draw();
+    }
+    this.dirty = false;
     this.raf = requestAnimationFrame(this.loop);
   };
 
-  private step(dt: number) {
-    this.time += dt;
+  /** Avança a física. Retorna true se algo ainda está se mexendo. */
+  private step(dt: number): boolean {
+    if (!this.coarse) this.time += dt;
+    let energy = 0;
     // ponteiro suavizado (sem tremer) e entrada/saída gradual
     const follow = 1 - Math.exp(-dt * 14);
     this.spx += (this.px - this.spx) * follow;
@@ -399,7 +427,10 @@ export class SquircleField {
       c.dy += c.vy * dt;
       c.ve += (K * 0.6 * (te - c.e) - C * 0.8 * c.ve) * dt;
       c.e += c.ve * dt;
+      energy += Math.abs(c.vx) + Math.abs(c.vy) + Math.abs(c.ve) * 40 + Math.abs(c.dx) * 0.2 + c.e * 20;
     }
+    const scrolling = Math.abs(this.scrollY - this.sScroll) > 0.5;
+    return energy > 0.5 || scrolling || this.ripples.length > 0 || Math.abs(this.pTarget - this.pStrength) > 0.01 || this.pStrength > 0.01;
   }
 
   private frameTransform() {
@@ -467,15 +498,17 @@ export class SquircleField {
         const shift = e * (1 - k) * 7;
         const ox = sx - (nx * cos - ny * sin) * shift;
         const oy = sy - (nx * sin + ny * cos) * shift;
-        for (let i = 0; i < UNIT_STEPS; i++) {
-          const ux = unit[i * 2] * a;
-          const uy = unit[i * 2 + 1] * a;
+        // fecha com lineTo de volta ao 1º ponto (closePath em Path2D custa caro no Chrome)
+        const n = this.steps;
+        for (let i = 0; i <= n; i++) {
+          const j = (i % n) * 2;
+          const ux = unit[j] * a;
+          const uy = unit[j + 1] * a;
           const x = ox + ux * tc - uy * ts;
           const y = oy + ux * ts + uy * tc;
           if (i === 0) path.moveTo(x, y);
           else path.lineTo(x, y);
         }
-        path.closePath();
       }
     }
 

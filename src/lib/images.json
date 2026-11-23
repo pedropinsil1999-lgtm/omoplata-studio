@@ -1,0 +1,162 @@
+{
+  "costas-luz": {
+    "w": 2000,
+    "h": 3000,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(40,24,24)"
+  },
+  "reformer-footwork": {
+    "w": 2000,
+    "h": 2829,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(120,88,56)"
+  },
+  "fisio-alongamento": {
+    "w": 2000,
+    "h": 2998,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(8,8,8)"
+  },
+  "massagem-costas": {
+    "w": 2000,
+    "h": 3000,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(168,104,72)"
+  },
+  "pilates-estudio-vertical": {
+    "w": 2000,
+    "h": 3000,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(232,232,232)"
+  },
+  "atleta-padel-salto": {
+    "w": 2000,
+    "h": 3000,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(8,8,8)"
+  },
+  "atleta-tenis-saque": {
+    "w": 2000,
+    "h": 3000,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(8,8,8)"
+  },
+  "atleta-padel-quadra": {
+    "w": 2000,
+    "h": 3000,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(8,8,8)"
+  },
+  "espaco-reformers-madeira": {
+    "w": 2000,
+    "h": 1333,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(216,216,216)"
+  },
+  "espaco-parede-madeira": {
+    "w": 2000,
+    "h": 3000,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(184,152,136)"
+  },
+  "espaco-salao": {
+    "w": 2000,
+    "h": 1290,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(120,120,104)"
+  },
+  "espaco-janelas": {
+    "w": 2000,
+    "h": 1333,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(200,200,200)"
+  },
+  "equipe-ombro": {
+    "w": 2000,
+    "h": 1333,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(8,8,24)"
+  },
+  "equipe-antebraco": {
+    "w": 2000,
+    "h": 3000,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(152,136,120)"
+  },
+  "equipe-maos": {
+    "w": 2000,
+    "h": 1333,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(200,168,136)"
+  },
+  "presente-massagem": {
+    "w": 2000,
+    "h": 1333,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "color": "rgb(248,232,232)"
+  }
+}
